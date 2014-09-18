@@ -3,7 +3,8 @@ joi = require 'joi'
 watchify   = require 'watchify'
 browserify = require 'browserify'
 source     = require 'vinyl-source-stream'
-
+gulp       = require 'gulp'
+path       = require 'path'
 
 build_js = (src, dest, opts) ->
   b_opts =
@@ -33,7 +34,7 @@ build_js = (src, dest, opts) ->
 
   bundle = ->
     b.bundle()
-      .on 'error', $.util.log.bind($.util, 'Browserify')
+      .on 'error', console.log.bind(console, 'Browserify')
       .pipe source('bundle.js')
       .pipe gulp.dest dest
   b.on 'update', bundle if opts.watch
@@ -43,13 +44,12 @@ build_js = (src, dest, opts) ->
 
 
 
-module.exports = (gulp, opts) ->
-  gulp.task 'build-js', ->
+module.exports = (opts) ->
+  build: ->
     build_js opts.src, opts.dest,
       minify: true
       watch: false
-
-  gulp.task 'watch-js', ->
+  watch: ->
     build_js opts.src, opts.dest,
       minify: false
       watch: true
