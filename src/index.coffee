@@ -5,7 +5,7 @@ browserify = require 'browserify'
 source     = require 'vinyl-source-stream'
 gulp       = require 'gulp'
 $          = require('gulp-load-plugins')(lazy: true)
-
+path       = require 'path'
 
 
 class Builder
@@ -14,6 +14,7 @@ class Builder
   js: (src, out, opts = {}) ->
     b_opts =
       extensions: ['.coffee']
+      debug: opts.minify
 
     _.extend b_opts, watchify.args if opts.watch
 
@@ -24,7 +25,18 @@ class Builder
     # Transforms
     b.transform require 'coffeeify'
     b.transform require './transforms/ng-template-cache'
-    b.transform require 'browserify-ngannotate'
+
+    if opts.minify
+      b.transform (file) ->
+        require('browserify-ngannotate') file,
+          x: ['.coffee']
+      b.plugin require('minifyify'),
+        output: path.join @dest, out.replace('js', 'map.json')
+        uglify:
+          mangle: true
+
+
+
     bundle = =>
       b.bundle()
         .on 'error', $.util.log.bind($.util, 'Browserify')
@@ -34,10 +46,8 @@ class Builder
     bundle()
 
 
-
-
 module.exports = (dest) ->
-  new Builder dest
+  new Builder(dest)
 
 
 
