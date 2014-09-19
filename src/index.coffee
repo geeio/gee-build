@@ -4,7 +4,7 @@ class Builder
   constructor: (@gulp, opts) ->
     @used_tasks = {}
 
-    ['html', 'js', 'less'].forEach (type) =>
+    ['html', 'js', 'less', 'sass'].forEach (type) =>
       options = opts[type]
       return unless options
       options.dest ||= opts.dest

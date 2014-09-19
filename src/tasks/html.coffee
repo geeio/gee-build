@@ -13,8 +13,9 @@ module.exports = (opts) ->
   out =
     build: build
     watch: ->
-      $.watch('www/**/*')
-        .pipe $.livereload()
+      if opts.lr
+        $.watch('www/**/*')
+          .pipe $.livereload()
 
 
       gulp.src(opts.src)
@@ -22,5 +23,5 @@ module.exports = (opts) ->
         .pipe $.plumber()
         .pipe $.jade
           pretty: true
-        .pipe $.embedlr() # TODO - only if index.
+        .pipe $.if opts.lr, $.embedlr() # TODO - only if index.
         .pipe gulp.dest(opts.dest)
