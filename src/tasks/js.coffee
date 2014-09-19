@@ -41,15 +41,13 @@ build_js = (src, dest, opts) ->
   bundle()
 
 
-
-
-
-module.exports = (opts) ->
-  build: ->
+module.exports.register = (opts, reg) ->
+  reg.build 'js', ->
     build_js opts.src, opts.dest,
       minify: true
       watch: false
-  watch: ->
+
+  reg.watch 'js', ->
     build_js opts.src, opts.dest,
       minify: false
       watch: true

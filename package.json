@@ -4,7 +4,8 @@
   "description": "Opininated [And poorly written] gulp setup for jade/angular/browserify/coffee-script",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pretest": "coffeelint -c src test",
+    "test": "mocha"
   },
   "keywords": [
     "jade"
@@ -36,6 +37,12 @@
     "gulp-jade": "^0.8.0",
     "minifyify": "^4.2.0",
     "gulp-minify-css": "^0.3.10",
-    "gulp-sass": "^0.7.3"
+    "gulp-sass": "^0.7.3",
+    "lazypipe": "^0.2.2",
+    "gulp-filter": "^1.0.2"
+  },
+  "devDependencies": {
+    "chai": "^1.9.1",
+    "mocha": "^1.21.4"
   }
 }

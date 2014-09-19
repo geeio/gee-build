@@ -1,4 +1,5 @@
 _ = require 'lodash'
+config = require './config'
 
 class Builder
   constructor: (@gulp, opts) ->
@@ -27,11 +28,31 @@ class Builder
     @gulp.task 'build', @used_tasks.build
     @
 
+class Registry
+  constructor: (@gulp) ->
+    @tasks =
+      watch: []
+      build: []
+
+  register: (tn, action, cb) ->
+    gtask_name = "#{action}-#{tn}"
+    @tasks[action].push gtask_name
+    @gulp.task gtask_name, cb
+
+  build: (tn, cb) ->
+    @register tn, 'build', cb
+
+  watch: (tn, cb) ->
+    @register tn, 'watch', cb
+
 module.exports = (gulp, options) ->
-  new Builder(gulp, options)
+  options = config.validate(options)
+  reg = new Registry gulp
+  options.used_tasks
+    .map (tn) ->
+      task = require "./tasks/#{tn}"
 
-
-
+      task.register options[tn], reg
 
 
 
