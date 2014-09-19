@@ -1,7 +1,7 @@
 {
   "name": "gee-build",
   "version": "0.0.0",
-  "description": "Opininated gulp setup for jade/angular/browserify/coffee-script",
+  "description": "Opininated [And poorly written] gulp setup for jade/angular/browserify/coffee-script",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

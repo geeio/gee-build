@@ -1,8 +1,15 @@
 _ = require 'lodash'
 
 class Builder
-  constructor: (@gulp, @global_opts) ->
+  constructor: (@gulp, opts) ->
     @used_tasks = {}
+
+    ['html', 'js', 'less'].forEach (type) =>
+      options = opts[type]
+      return unless options
+      options.dest ||= opts.dest
+      @use type, options
+    @done()
 
   use: (tn, options) ->
     tasks = require("./tasks/#{tn}")(options)
