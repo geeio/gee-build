@@ -54,5 +54,8 @@ module.exports = (gulp, options) ->
 
       task.register options[tn], reg
 
+  gulp.task 'build', reg.tasks.build
+  gulp.task 'watch', reg.tasks.watch
+
 
 

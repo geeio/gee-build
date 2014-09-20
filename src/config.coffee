@@ -17,21 +17,15 @@ module.exports.schema = schema =
   dest: joi.string().description 'Default output directory'
 
   js: task_helper 'Use browserify to build.',
-    uglify: joi.object().unknown(true).description('Options for uglify.').keys
-      mangle: joi.boolean().default(true)
+    uglify: joi.object()
 
   html: task_helper 'jade -> html',
     lr: joi.boolean().default(false).description 'Include livereload snippet and watch dest dir'
-
-    jade: joi.object().unknown(true).keys
-      pretty: joi.boolean().default(true)
+    jade: joi.object()
 
   css: task_helper 'less -> css',
-    minify: joi.object().unknown(true).keys
-      keepSpecialComments: joi.any().valid('*', 0, 1).default(0) # Remove all comments
-      keepBreaks: joi.boolean().default(false)
-    less: joi.object().unknown(true).keys
-      vendor: joi.array().default([])
+    minify: joi.object()
+    less: joi.object()
 
 
 
