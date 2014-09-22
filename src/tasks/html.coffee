@@ -10,9 +10,12 @@ module.exports.register = (opts, reg) ->
       .pipe gulp.dest(opts.dest)
 
   reg.watch 'html', ->
+    $.watch 'www/**/*'
+      .pipe $.livereload()
+
     gulp.src(opts.src)
       .pipe $.watch opts.src
       .pipe $.plumber()
       .pipe $.jade util.options_for(opts.jade, 'watch')
-      .pipe $.if(opts.lr, $.embedlr())
+      .pipe $.embedlr()
       .pipe gulp.dest(opts.dest)

@@ -11,7 +11,7 @@ task_helper = (description, extra = {}) ->
 
   joi.object().optional().description(description).keys keys
 
-module.exports.task_names = task_names = ['js', 'html', 'css']
+module.exports.task_names = task_names = ['js', 'html', 'css', 'bower']
 
 module.exports.schema = schema =
   dest: joi.string().description 'Default output directory'
@@ -27,6 +27,7 @@ module.exports.schema = schema =
     minify: joi.object()
     less: joi.object()
 
+  bower: joi.object().optional().description('bower')
 
 
 module.exports.validate = (opts) ->
