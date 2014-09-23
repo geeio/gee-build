@@ -2,9 +2,10 @@ gulp        = require 'gulp'
 bower_files = require 'main-bower-files'
 $           = require('gulp-load-plugins')(lazy: true)
 
-build = (opts) ->
+
+module.exports = (opts, {minify}) ->
   files = bower_files()
-  if opts.min
+  if minify
     files = files.map (f) ->
       f.replace '.js', '.min.js'
 
@@ -18,12 +19,3 @@ build = (opts) ->
     .pipe $.size
       gzip: true
     .pipe gulp.dest opts.dest
-
-module.exports.register = (opts, reg) ->
-  reg.build 'bower', ->
-    opts.min = true
-    build(opts)
-
-  reg.watch 'bower', ->
-    build(opts)
-

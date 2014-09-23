@@ -1,6 +1,8 @@
 gulp  = require 'gulp'
 $     = require('gulp-load-plugins')(lazy: true)
 util  = require '../util'
+joi = require 'joi'
+
 
 build = (opts) ->
   is_less = $.filter '*.less'
@@ -13,12 +15,20 @@ build = (opts) ->
     .pipe gulp.dest(opts.dest)
 
 
-module.exports.register = (opts, reg) ->
-  reg.build 'css', ->
-    build(opts)
+module.exports =
+  options:
+    dest: joi.string().required()
+    src: joi.string().required()
+    less: joi.object()
+    sass: joi.object()
+    minify: joi.object().default
+      keepSpecialComments: 0
 
-  reg.watch 'css', ->
-    build(opts)
-    $.watch util.extract_watch(opts), (files, cb) ->
-      build(opts).on 'end', cb
+  tasks:
+    build: (opts) ->
+      build(opts)
+
+    watch: (opts) ->
+      $.watch util.extract_watch(opts), (files, cb) ->
+        build(opts).on 'end', cb
 

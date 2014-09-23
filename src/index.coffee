@@ -1,37 +1,65 @@
-_ = require 'lodash'
-config = require './config'
+util = require './util'
+_    = require 'lodash'
+joi  = require 'joi'
+rimraf = require 'rimraf'
+$     = require('gulp-load-plugins')(lazy: true)
 
-class Registry
+check = (opt, schema) ->
+  {value, error} = joi.validate opt, schema,
+    abortEarly: false
+  throw error if error
+  value
+
+
+class Builder
   constructor: (@gulp) ->
-    @tasks =
-      watch: []
-      build: []
+    @tasks = {}
 
-  register: (tn, action, cb) ->
-    gtask_name = "#{action}-#{tn}"
-    @tasks[action].push gtask_name
-    @gulp.task gtask_name, cb
+  add_subtask_type: (type) ->
+    @tasks[type] = []
 
-  build: (tn, cb) ->
-    @register tn, 'build', cb
+  add_subtask: (type, task_name, cb) ->
+    tn = "gee-#{type}-#{task_name}"
+    @tasks[type].push tn
 
-  watch: (tn, cb) ->
-    @register tn, 'watch', cb
+    @gulp.task tn, cb
+
+  finish: (hooks) ->
+    _.each @tasks, (tasks, type) =>
+
+      post = hooks["post_#{type}"] || _.noop
+      @gulp.task "gee-#{type}", tasks, post
 
 module.exports = (gulp, options) ->
-  options = config.validate(options)
-  reg = new Registry gulp
-  options.used_tasks
-    .map (tn) ->
-      task = require "./tasks/#{tn}"
+  builder = new Builder gulp
 
-      task.register options[tn], reg
+  ['build', 'watch'].forEach (t) ->
+    builder.add_subtask_type t
 
-
-  gulp.task 'build', reg.tasks.build
+  gulp.task 'clean', (cb) ->
+    rimraf options.dest, cb
 
 
-  gulp.task 'watch', reg.tasks.watch
+  tasks = util.task_chain()
+    .reject (task) ->
+      task.name in options
+    .each (task) ->
+      opts = options[task.name]
+      opts.dest ||= options.dest unless task.dest == false
+
+      opts = check(opts, task.options)
+
+      _.each task.tasks, (build_fn, type) ->
+        builder.add_subtask type, task.name, ->
+          build_fn(opts)
+
+  builder.finish
+    post_build: ->
+      gulp.src "#{options.dest}/**/*"
+        .pipe $.size
+          showFiles: true
+          gzip: true
+
 
 
 

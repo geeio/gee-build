@@ -1,11 +1,30 @@
-_ = require 'lodash'
-joi = require 'joi'
-watchify   = require 'watchify'
-browserify = require 'browserify'
-source     = require 'vinyl-source-stream'
-gulp       = require 'gulp'
-path       = require 'path'
+_           = require 'lodash'
+joi         = require 'joi'
+watchify    = require 'watchify'
+browserify  = require 'browserify'
+source      = require 'vinyl-source-stream'
+gulp        = require 'gulp'
+path        = require 'path'
+bower_files = require 'main-bower-files'
+$           = require('gulp-load-plugins')(lazy: true)
+build_bower = (dest, minify) ->
+  files = bower_files()
+  if minify
+    files = files.map (f) ->
+      f.replace '.js', '.min.js'
 
+
+  gulp.src files
+    .pipe $.size
+      showFiles: true
+      title: 'bower'
+    .pipe $.concat 'vendor.js'
+    .pipe $.size()
+    .pipe $.size
+      gzip: true
+    .pipe gulp.dest dest
+
+module.exports.skip = true
 build_js = (src, dest, opts) ->
   b_opts =
     extensions: ['.coffee']
@@ -43,11 +62,14 @@ build_js = (src, dest, opts) ->
 
 module.exports.register = (opts, reg) ->
   reg.build 'js', ->
+    build_bower opts.dest, true
+
     build_js opts.src, opts.dest,
       minify: true
       watch: false
 
   reg.watch 'js', ->
+    build_bower opts.dest, false
     build_js opts.src, opts.dest,
       minify: false
       watch: true
