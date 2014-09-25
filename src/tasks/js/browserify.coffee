@@ -28,8 +28,10 @@ module.exports = (opts, flags) ->
     b.transform (file) ->
       require('browserify-ngannotate') file,
         x: ['.coffee']
+
+    map_out = opts.out.replace 'js', 'map'
     b.plugin require('minifyify'),
-      output: path.join opts.dest, 'bundle.map'
+      output: path.join opts.dest, map_out
       uglify: opts.uglify
 
 
@@ -38,7 +40,7 @@ module.exports = (opts, flags) ->
     console.log 'bundle'
     b.bundle()
       .on 'error', console.log.bind(console, 'Browserify')
-      .pipe source('bundle.js')
+      .pipe source opts.out
       .pipe gulp.dest opts.dest
   b.on 'update', bundle if flags.watch
   bundle()

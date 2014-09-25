@@ -10,6 +10,7 @@ module.exports =
   options:
     dest: joi.string().required()
     src: joi.string().required()
+    out: joi.string().default('bundle.js')
     uglify: joi.object().default
       mangle: true
     bower: joi.boolean()
