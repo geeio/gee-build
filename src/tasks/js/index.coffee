@@ -19,7 +19,7 @@ module.exports =
       flags =
         minify: true
         watch: false
-      build_bower opts, flags
+      build_bower opts, flags if opts.bower
       build_browserify opts, flags
 
 
@@ -28,6 +28,6 @@ module.exports =
       flags =
         minify: false
         watch: true
-      build_bower opts, flags
+      build_bower opts, flags if opts.bower
       build_browserify opts, flags
 

@@ -41,8 +41,8 @@ module.exports = (gulp, options) ->
 
 
   tasks = util.task_chain()
-    .reject (task) ->
-      task.name in options
+    .filter (task) ->
+      options[task.name]
     .each (task) ->
       opts = options[task.name]
       opts.dest ||= options.dest unless task.dest == false
