@@ -1,6 +1,6 @@
 {
   "name": "gee-build",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Opininated [And poorly written] gulp setup for jade/angular/browserify/coffee-script",
   "main": "index.js",
   "scripts": {
@@ -44,11 +44,11 @@
     "gulp-concat": "^2.4.1",
     "gulp-nodemon": "^1.0.4",
     "rimraf": "^2.2.8",
-    "gulp-help": "^1.1.0"
+    "gulp-help": "^1.1.0",
+    "gulp-size": "^1.1.0"
   },
   "devDependencies": {
     "chai": "^1.9.1",
-    "mocha": "^1.21.4",
-    "gulp-size": "^1.1.0"
+    "mocha": "^1.21.4"
   }
 }
