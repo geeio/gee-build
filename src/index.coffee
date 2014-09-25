@@ -22,21 +22,22 @@ class Builder
     tn = "gee-#{type}-#{task_name}"
     @tasks[type].push tn
 
-    @gulp.task tn, cb
+    @gulp.task tn, tn, cb
 
   finish: (hooks) ->
     _.each @tasks, (tasks, type) =>
 
       post = hooks["post_#{type}"] || _.noop
-      @gulp.task "gee-#{type}", tasks, post
+      @gulp.task "gee-#{type}", type, tasks, post
 
 module.exports = (gulp, options) ->
+  $.help gulp
   builder = new Builder gulp
 
   ['build', 'watch'].forEach (t) ->
     builder.add_subtask_type t
 
-  gulp.task 'clean', (cb) ->
+  gulp.task 'clean', 'cleans', (cb) ->
     rimraf options.dest, cb
 
 
