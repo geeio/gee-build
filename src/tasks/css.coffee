@@ -29,6 +29,7 @@ module.exports =
       build(opts)
 
     watch: (opts) ->
+      build(opts)
       $.watch util.extract_watch(opts), (files, cb) ->
         build(opts).on 'end', cb
 
