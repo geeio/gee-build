@@ -23,6 +23,7 @@ module.exports = (opts, flags) ->
   # Transforms
   b.transform require 'coffeeify'
   b.transform require '../../transforms/ng-template-cache'
+  b.transform require 'bulkify'
 
   if flags.minify
     b.transform (file) ->

@@ -57,9 +57,13 @@ module.exports = (gulp, options) ->
   builder.finish
     post_build: ->
       gulp.src "#{options.dest}/**/*"
+        .pipe $.if '*.js', $.rev()
+        .pipe $.if '*.css', $.rev()
+        .pipe $.revReplace()
         .pipe $.size
           showFiles: true
           gzip: true
+        .pipe gulp.dest(options.dest)
 
 
 
