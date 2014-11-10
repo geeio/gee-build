@@ -49,6 +49,7 @@ module.exports = (gulp, options) ->
       opts.dest ||= options.dest unless task.dest == false
 
       opts = check(opts, task.options)
+      opts = _.defaults opts, task.defaults
 
       _.each task.tasks, (build_fn, type) ->
         builder.add_subtask type, task.name, ->
