@@ -1,6 +1,6 @@
 {
   "name": "gee-build",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Opininated [And poorly written] gulp setup for jade/angular/browserify/coffee-script",
   "main": "index.js",
   "scripts": {
